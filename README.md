@@ -1,2 +1,2 @@
 # Final-project
-gradiation Final project -- android fingerprint arduino door lock
+Gradiation Final Project -- Android fingerprint doorlock controll app & Arduino doorlock
