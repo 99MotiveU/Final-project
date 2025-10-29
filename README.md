@@ -1,2 +1,75 @@
-# Final-project
-Gradiation Final Project -- Android doorlock controlled by fingerprint app & Arduino doorlock module
+# 스마트 도어락 프로젝트
+
+## 1. 프로젝트 소개
+
+이 프로젝트는 아두이노와 안드로이드 스마트폰을 연동하여 제작한 스마트 도어락 시스템입니다. 스마트폰의 지문 인식을 통해 사용자를 인증하고, 블루투스 통신으로 아두이노에 연결된 솔레노이드 밸브를 제어하여 문을 열고 잠글 수 있습니다.
+
+## 2. 주요 기능
+
+*   **지문 인식을 통한 사용자 인증:** 안드로이드 앱에서 지문 센서를 사용하여 등록된 사용자만 문을 제어할 수 있습니다.
+*   **블루투스 통신:** 스마트폰과 아두이노는 블루투스(HC-06 모듈)를 통해 무선으로 통신합니다.
+*   **솔레노이드 잠금 제어:** 아두이노는 앱으로부터 받은 신호에 따라 솔레노이드 밸브를 작동시켜 도어락을 열거나 잠급니다.
+
+## 3. 시스템 구성
+
+### 하드웨어
+
+*   Arduino (Uno 등)
+*   솔레노이드 밸브 (12V)
+*   블루투스 모듈 (HC-06)
+*   릴레이 모듈
+*   외부 전원 공급 장치
+
+### 소프트웨어
+
+*   **아두이노 스케치 (`.ino`):**
+    *   `smart_doorlock.ino` / `btdoorlock1104.ino`
+    *   블루투스 모듈로부터 "unlock" 또는 "lock"과 같은 특정 문자열 명령을 수신합니다.
+    *   수신된 명령에 따라 솔레노이드 밸브를 제어하기 위해 특정 핀(9번)의 출력을 HIGH 또는 LOW로 설정합니다.
+*   **안드로이드 애플리케이션:**
+    *   `bluetoothsolenoid` Android Studio 프로젝트
+    *   사용자에게 지문 인증을 요청합니다.
+    *   인증에 성공하면 블루투스를 통해 아두이노에 "unlock" 명령을 전송하여 문을 엽니다.
+
+## 4. 파일 구조
+
+```
+D:\Final-project
+├───final project
+│   ├───smart_doorlock.ino          # 아두이노 메인 스케치 파일
+│   └───AndroidStudioProjects
+│       └───bluetoothsolenoid       # 안드로이드 앱 프로젝트
+│           └───app
+│               └───src
+│                   └───main
+│                       ├───java
+│                       │   └───com/example/bluetoothsolenoid
+│                       │       └───MainActivity.kt     # 지문 인식 및 메인 로직
+│                       └───res
+│                           ├───layout
+│                           │   └───activity_main.xml   # 앱 메인 화면 레이아웃
+│                           └───drawable
+│                               └───ic_fingerprint.jpg  # 지문 아이콘 이미지
+├───btdoorlock1104
+│   └───btdoorlock1104.ino          # 아두이노 스케치 (다른 버전)
+└───README.md                       # 프로젝트 설명 파일
+```
+
+## 5. 시작하기
+
+### 하드웨어 설정
+
+1.  아두이노의 9번 핀을 릴레이 모듈을 통해 솔레노이드 밸브에 연결합니다.
+2.  아두이노의 10번, 11번 핀을 블루투스 모듈(HC-06)의 TX, RX 핀에 각각 연결합니다.
+3.  솔레노이드 밸브와 아두이노에 각각 적절한 전원을 공급합니다.
+4.  아두이노 IDE를 사용하여 `smart_doorlock.ino` 또는 `btdoorlock1104.ino` 스케치를 아두이노 보드에 업로드합니다.
+
+### 소프트웨어 설정
+
+1.  Android Studio에서 `final project/AndroidStudioProjects/bluetoothsolenoid` 프로젝트를 엽니다.
+2.  안드로이드 스마트폰에서 '개발자 옵션'과 'USB 디버깅'을 활성화합니다.
+3.  스마트폰을 컴퓨터에 연결하고 앱을 빌드하여 설치합니다.
+4.  앱을 실행하기 전, 스마트폰의 블루투스 설정에서 HC-06 모듈과 페어링을 완료합니다.
+5.  앱을 실행하고 지문 인증을 수행하면 페어링된 아두이노로 신호가 전송되어 도어락이 작동합니다.
+
+**참고:** `MainActivity.kt` 파일에는 현재 지문 인증 부분만 구현되어 있으며, 인증 성공 후 블루투스 통신을 통해 아두이노에 신호를 보내는 로직을 추가해야 합니다.
